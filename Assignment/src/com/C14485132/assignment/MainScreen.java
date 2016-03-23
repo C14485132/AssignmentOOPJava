@@ -58,36 +58,36 @@ public class MainScreen {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-			JMenu mnNewMenu = new JMenu("Open...");
-			mnFile.add(mnNewMenu);
+		JMenu mnNewMenu = new JMenu("Open...");
+		mnFile.add(mnNewMenu);
 		
-				JMenuItem mntmCheckTextFile = new JMenuItem("Check text file");
-				mntmCheckTextFile.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						FileDialog fd = new FileDialog(frame, "Choose a text file", FileDialog.LOAD);
-						fd.setFile("*.txt");
-						fd.setVisible(true);
-						
-					}
-				});
-				mnNewMenu.add(mntmCheckTextFile);
-		
-				JMenuItem mntmCheckUsername = new JMenuItem("Check username");
-				mnNewMenu.add(mntmCheckUsername);
-		
-				JMenuItem mntmCheck = new JMenuItem("Check pasted text");
-				mnNewMenu.add(mntmCheck);
+		JMenuItem mntmCheckTextFile = new JMenuItem("Check text file");
+		mntmCheckTextFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fd = new FileDialog(frame, "Choose a text file", FileDialog.LOAD);
+				fd.setFile("*.txt");
+				fd.setVisible(true);
 				
-				JMenu mnSave = new JMenu("Save");
-				mnFile.add(mnSave);
+			}
+		});
+		mnNewMenu.add(mntmCheckTextFile);
+		
+		JMenuItem mntmCheckUsername = new JMenuItem("Check username");
+		mnNewMenu.add(mntmCheckUsername);
+
+		JMenuItem mntmCheck = new JMenuItem("Check pasted text");
+		mnNewMenu.add(mntmCheck);
+		
+		JMenu mnSave = new JMenu("Save");
+		mnFile.add(mnSave);
 		
 		//Filter Menu bar
 		JMenu mnFilters = new JMenu("Filters");
 		menuBar.add(mnFilters);
 		
-			JCheckBoxMenuItem chckbxmntmFilter = new JCheckBoxMenuItem("Filter 1");
-			mnFilters.add(chckbxmntmFilter);
+		JCheckBoxMenuItem chckbxmntmFilter = new JCheckBoxMenuItem("Filter 1");
+		mnFilters.add(chckbxmntmFilter);
 		
 		//Options Menu bar
 		JMenu mnOptions = new JMenu("Options");
