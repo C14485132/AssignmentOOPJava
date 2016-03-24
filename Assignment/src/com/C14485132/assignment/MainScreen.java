@@ -74,6 +74,12 @@ public class MainScreen {
 		mnNewMenu.add(mntmCheckTextFile);
 		
 		JMenuItem mntmCheckUsername = new JMenuItem("Check username");
+		mntmCheckUsername.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UsernameCheckerInput userInput = new UsernameCheckerInput("Username Checker");
+				userInput.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmCheckUsername);
 
 		JMenuItem mntmCheck = new JMenuItem("Check pasted text");
