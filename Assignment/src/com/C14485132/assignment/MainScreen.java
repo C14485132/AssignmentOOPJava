@@ -5,15 +5,12 @@ import java.awt.BorderLayout;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
 public class MainScreen {
 
@@ -46,7 +43,7 @@ public class MainScreen {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("Post Filter");
 		frame.setBounds(100, 100, 750, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -54,7 +51,7 @@ public class MainScreen {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
-		//File menu bar
+		//File menu bar, contains Check username, open file and pasted text
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
@@ -95,9 +92,18 @@ public class MainScreen {
 		JCheckBoxMenuItem chckbxmntmFilter = new JCheckBoxMenuItem("Filter 1");
 		mnFilters.add(chckbxmntmFilter);
 		
-		//Options Menu bar
+		//Options menu
 		JMenu mnOptions = new JMenu("Options");
 		menuBar.add(mnOptions);
+		
+		JMenuItem mntmFilterOptions = new JMenuItem("Filter Options");
+		mntmFilterOptions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OptionsScreen options = new OptionsScreen("Filter Options");
+				options.setVisible(true);
+			}
+		});
+		mnOptions.add(mntmFilterOptions);
 	}
 
 }

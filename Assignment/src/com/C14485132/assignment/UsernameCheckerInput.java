@@ -10,10 +10,17 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
+import java.awt.Choice;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
+@SuppressWarnings("serial")
 public class UsernameCheckerInput extends JFrame {
 
 	private JPanel contentPane;
+	private double thresholdPercent;
+	private JCheckBox chckbxCapscheck;
+	private JCheckBox chckbxProfanitycheck;
 
 	public UsernameCheckerInput(String title) {
 		super(title);
@@ -38,15 +45,54 @@ public class UsernameCheckerInput extends JFrame {
 		});
 		contentPane.add(btnSubmit);
 		
-		JCheckBox chckbxCapscheck = new JCheckBox("Check for excessive caps");
+		setChckbxCapscheck(new JCheckBox("Check for excessive caps"));
+		chckbxCapscheck.setSelected(true);
 		contentPane.add(chckbxCapscheck);
 		
-		JCheckBox chckbxProfanitycheck = new JCheckBox("Check for Profanity");
+		setChckbxProfanitycheck(new JCheckBox("Check for profanity"));
+		chckbxProfanitycheck.setSelected(true);
 		contentPane.add(chckbxProfanitycheck);
+		
+		JLabel lblThresholdtext = new JLabel("Caps warning threshold:");
+		contentPane.add(lblThresholdtext);
+		
+		Choice choiceThreshold = new Choice();
+		setThresholdPercent(0.25);
+		choiceThreshold.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				//Swapping % string to double
+				switch (choiceThreshold.getSelectedItem()) {
+					case "25%": {
+						setThresholdPercent(0.25);
+						break;
+					} case "50%": {
+						setThresholdPercent(0.5);
+						break;
+					} case "75%": {
+						setThresholdPercent(0.75);
+						break;
+					} case "90%": {
+						setThresholdPercent(0.90);
+						break;
+					} case "100%": {
+						setThresholdPercent(1);
+						break;
+					}
+				}//End switch
+
+				System.out.println(getThresholdPercent());
+			}
+		});
+		choiceThreshold.addItem("25%");
+		choiceThreshold.addItem("50%");
+		choiceThreshold.addItem("75%");
+		choiceThreshold.addItem("90%");
+		choiceThreshold.addItem("100%");
+		contentPane.add(choiceThreshold);
 	}
 	
-	//Checks all of the 
-	public Boolean[] usernameFilters(String s) {
+	//Checks all of the filters
+	public void usernameFilters(String s) {
 		//0=badLength
 		//1=containsBadChars
 		//2=profanityFound
@@ -66,20 +112,49 @@ public class UsernameCheckerInput extends JFrame {
 			}
 		}
 		
-		//TODO: profanity stuff
+		//Checking the username against the profanity filters
+		if (chckbxProfanitycheck.isSelected()) {
+			//TODO: profanity stuff
+		}
 		
 		//Checking to see if <50% of characters are caps.
-		for (int i=0;i<s.length();i++) {
-			if (Character.isUpperCase(s.charAt(i))) {
-				capsCount++;
+		if (chckbxCapscheck.isSelected()) {
+			for (int i=0;i<s.length();i++) {
+				if (Character.isUpperCase(s.charAt(i))) {
+					capsCount++;
+				}
+			}
+			
+			if (s.length()*getThresholdPercent() <= capsCount) {
+				bArr[3] = true;
 			}
 		}
 		
-		if (s.length()/2 < capsCount) {
-			bArr[3] = true;
-		}
-		
-		return bArr;
+		//Opening the dialogue option
+	}
+
+	double getThresholdPercent() {
+		return thresholdPercent;
+	}
+
+	void setThresholdPercent(double thresholdPercent) {
+		this.thresholdPercent = thresholdPercent;
+	}
+
+	JCheckBox getChckbxCapscheck() {
+		return chckbxCapscheck;
+	}
+
+	void setChckbxCapscheck(JCheckBox chckbxCapscheck) {
+		this.chckbxCapscheck = chckbxCapscheck;
+	}
+
+	JCheckBox getChckbxProfanitycheck() {
+		return chckbxProfanitycheck;
+	}
+
+	void setChckbxProfanitycheck(JCheckBox chckbxProfanitycheck) {
+		this.chckbxProfanitycheck = chckbxProfanitycheck;
 	}
 
 }
