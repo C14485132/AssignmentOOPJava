@@ -7,9 +7,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+
 import java.awt.Choice;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -35,6 +39,12 @@ public class UsernameCheckerInput extends JFrame {
 		contentPane.add(lblUnamereqs);
 		
 		JTextField txtUserInput = new JTextField(15);
+		//Press enter to run
+		txtUserInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				usernameFilters(txtUserInput.getText());
+			}
+		});
 		contentPane.add(txtUserInput);
 		
 		JButton btnSubmit = new JButton("Check");
@@ -79,8 +89,6 @@ public class UsernameCheckerInput extends JFrame {
 						break;
 					}
 				}//End switch
-
-				System.out.println(getThresholdPercent());
 			}
 		});
 		choiceThreshold.addItem("25%");
@@ -93,22 +101,24 @@ public class UsernameCheckerInput extends JFrame {
 	
 	//Checks all of the filters
 	public void usernameFilters(String s) {
-		//0=badLength
-		//1=containsBadChars
-		//2=profanityFound
-		//3=capsWarn
-		Boolean[] bArr = new Boolean[4];
+		boolean badUsername = false;
+		boolean badLength = false;
+		boolean badChars = false;
+		boolean badLang = false;
+		boolean badCaps = false;
 		int capsCount = 0;
 		
 		//Checking the length of the string
 		if (s.length() > 15) {
-			bArr[0] = true;
+			badUsername = true;
+			badLength = true;
 		}
 		
 		//Checking if all the letter are valid (alphanumeric underscore only)
 		for (int i=0;i<s.length();i++) {
 			if (!(Character.isDigit(s.charAt(i))) && !(Character.isLetter(s.charAt(i))) && !(s.charAt(i) == '_')) {
-				bArr[1] = true;
+				badUsername = true;
+				badChars = true;
 			}
 		}
 		
@@ -126,11 +136,39 @@ public class UsernameCheckerInput extends JFrame {
 			}
 			
 			if (s.length()*getThresholdPercent() <= capsCount) {
-				bArr[3] = true;
+				badUsername = true;
+				badCaps = true;
 			}
 		}
 		
 		//Opening the dialogue option
+		//If any of the elements are true, open dialogue
+		if (badUsername) {
+			String errorString;
+			errorString = "The username has the following errors:\n";
+			
+			if (badLength) {
+				errorString = errorString + "\nUsername too long";
+			}
+			
+			if (badChars) {
+				errorString = errorString + "\nIllegal characters";
+			}
+			
+			if (badLang) {
+				errorString = errorString + "\nProfanity in username";
+			}
+			
+			if (badCaps) {
+				errorString = errorString + "\nToo many caps";
+			}
+			
+			JOptionPane.showMessageDialog(new JFrame(), errorString, "Error!", JOptionPane.WARNING_MESSAGE);
+			setVisible(true);
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "<html><center>Username does not break any rules!</center></html>", "Success!", JOptionPane.PLAIN_MESSAGE);
+		}
+		
 	}
 
 	double getThresholdPercent() {
