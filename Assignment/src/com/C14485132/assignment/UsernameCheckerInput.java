@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 
 import java.awt.Choice;
 import java.awt.event.ItemListener;
