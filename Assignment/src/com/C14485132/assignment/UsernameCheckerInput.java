@@ -15,7 +15,9 @@ import javax.swing.JCheckBox;
 
 import java.awt.Choice;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.awt.event.ItemEvent;
+
 
 @SuppressWarnings("serial")
 public class UsernameCheckerInput extends JFrame {
@@ -24,9 +26,13 @@ public class UsernameCheckerInput extends JFrame {
 	private double thresholdPercent;
 	private JCheckBox chckbxCapscheck;
 	private JCheckBox chckbxProfanitycheck;
+	static ArrayList<String> profanity = new ArrayList<String>();
+	
 
 	public UsernameCheckerInput(String title) {
 		super(title);
+		ReadProfanityList list = new ReadProfanityList();
+		profanity = list.getProfList();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(300, 250, 350, 200);
 		contentPane = new JPanel();
@@ -107,67 +113,80 @@ public class UsernameCheckerInput extends JFrame {
 		boolean badCaps = false;
 		int capsCount = 0;
 		
-		//Checking the length of the string
-		if (s.length() > 15) {
-			badUsername = true;
-			badLength = true;
+		//Checking if a string was entered
+		if (s.length() == 0) {
+			JOptionPane.showMessageDialog(new JFrame(), "No username was entered!", "Error!", JOptionPane.WARNING_MESSAGE);
+			setVisible(true);
 		}
-		
-		//Checking if all the letter are valid (alphanumeric underscore only)
-		for (int i=0;i<s.length();i++) {
-			if (!(Character.isDigit(s.charAt(i))) && !(Character.isLetter(s.charAt(i))) && !(s.charAt(i) == '_')) {
+		else {
+			//Checking the length of the string
+			if (s.length() > 15) {
 				badUsername = true;
-				badChars = true;
+				badLength = true;
 			}
-		}
-		
-		//Checking the username against the profanity filters
-		if (chckbxProfanitycheck.isSelected()) {
-			//TODO: profanity stuff
-		}
-		
-		//Checking to see if <50% of characters are caps.
-		if (chckbxCapscheck.isSelected()) {
+			
+			//Checking if all the letter are valid (alphanumeric underscore only)
 			for (int i=0;i<s.length();i++) {
-				if (Character.isUpperCase(s.charAt(i))) {
-					capsCount++;
+				if (!(Character.isDigit(s.charAt(i))) && !(Character.isLetter(s.charAt(i))) && !(s.charAt(i) == '_')) {
+					badUsername = true;
+					badChars = true;
 				}
 			}
 			
-			if (s.length()*getThresholdPercent() <= capsCount) {
-				badUsername = true;
-				badCaps = true;
+			//Checking the username against the profanity filters
+			if (chckbxProfanitycheck.isSelected()) {
+				for (String p : profanity) {
+					if (s.toLowerCase().contains(p.toLowerCase())) {
+						badUsername = true;
+						badLang = true;
+						break;
+					}
+				}
+			}
+			
+			//Checking to see if <50% of characters are caps.
+			if (chckbxCapscheck.isSelected()) {
+				for (int i=0;i<s.length();i++) {
+					if (Character.isUpperCase(s.charAt(i))) {
+						capsCount++;
+					}
+				}
+				
+				if (s.length()*getThresholdPercent() <= capsCount) {
+					badUsername = true;
+					badCaps = true;
+				}
+			}
+
+		
+			//Opening the dialogue option
+			//If any of the elements are true, open dialogue
+			if (badUsername) {
+				String errorString;
+				errorString = "The username has the following errors:\n";
+				
+				if (badLength) {
+					errorString = errorString + "\nUsername too long";
+				}
+				
+				if (badChars) {
+					errorString = errorString + "\nIllegal characters";
+				}
+				
+				if (badLang) {
+					errorString = errorString + "\nProfanity in username";
+				}
+				
+				if (badCaps) {
+					errorString = errorString + "\nToo many caps";
+				}
+				
+				JOptionPane.showMessageDialog(new JFrame(), errorString, "Error!", JOptionPane.WARNING_MESSAGE);
+				setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(), "<html><center>Username does not break any rules!</center></html>", "Success!", JOptionPane.PLAIN_MESSAGE);
 			}
 		}
-		
-		//Opening the dialogue option
-		//If any of the elements are true, open dialogue
-		if (badUsername) {
-			String errorString;
-			errorString = "The username has the following errors:\n";
-			
-			if (badLength) {
-				errorString = errorString + "\nUsername too long";
-			}
-			
-			if (badChars) {
-				errorString = errorString + "\nIllegal characters";
-			}
-			
-			if (badLang) {
-				errorString = errorString + "\nProfanity in username";
-			}
-			
-			if (badCaps) {
-				errorString = errorString + "\nToo many caps";
-			}
-			
-			JOptionPane.showMessageDialog(new JFrame(), errorString, "Error!", JOptionPane.WARNING_MESSAGE);
-			setVisible(true);
-		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "<html><center>Username does not break any rules!</center></html>", "Success!", JOptionPane.PLAIN_MESSAGE);
-		}
-		
 	}
 
 	double getThresholdPercent() {
