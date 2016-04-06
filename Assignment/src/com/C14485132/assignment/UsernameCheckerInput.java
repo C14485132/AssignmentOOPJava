@@ -72,15 +72,12 @@ public class UsernameCheckerInput extends JFrame {
 		contentPane.add(lblThresholdtext);
 		
 		Choice choiceThreshold = new Choice();
-		setThresholdPercent(0.25);
+		setThresholdPercent(0.5);
 		choiceThreshold.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				//Swapping % string to double
 				switch (choiceThreshold.getSelectedItem()) {
-					case "25%": {
-						setThresholdPercent(0.25);
-						break;
-					} case "50%": {
+					case "50%": {
 						setThresholdPercent(0.5);
 						break;
 					} case "75%": {
@@ -96,7 +93,6 @@ public class UsernameCheckerInput extends JFrame {
 				}//End switch
 			}
 		});
-		choiceThreshold.addItem("25%");
 		choiceThreshold.addItem("50%");
 		choiceThreshold.addItem("75%");
 		choiceThreshold.addItem("90%");
@@ -144,7 +140,7 @@ public class UsernameCheckerInput extends JFrame {
 				}
 			}
 			
-			//Checking to see if <50% of characters are caps.
+			//Checking to see if too many characters are caps.
 			if (chckbxCapscheck.isSelected()) {
 				for (int i=0;i<s.length();i++) {
 					if (Character.isUpperCase(s.charAt(i))) {
