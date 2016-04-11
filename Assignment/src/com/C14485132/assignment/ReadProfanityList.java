@@ -8,7 +8,7 @@ public class ReadProfanityList {
 	
 	static ArrayList<String> profanity = new ArrayList<String>();
 	
-	//opening badwords.txt, adding all words in the file to an ArrayList
+	//opening badwords.txt, adding all words in the file to an ArrayList, then returning the arraylist
 	public ArrayList<String> getProfList() {
 		try {
 			InputStream badwordsLoc = this.getClass().getResourceAsStream("badwords.txt");

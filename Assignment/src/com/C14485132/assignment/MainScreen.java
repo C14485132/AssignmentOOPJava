@@ -52,7 +52,10 @@ public class MainScreen {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
-		//File menu bar, contains Check username, open file and pasted text
+		/**
+		 * File menu bar
+		 * Contains check username, open file and pasted text
+		 */
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
@@ -86,14 +89,20 @@ public class MainScreen {
 		JMenu mnSave = new JMenu("Save");
 		mnFile.add(mnSave);
 		
-		//Filter Menu bar
+		/**
+		 * Filter Menu bar
+		 * 
+		 */
 		JMenu mnFilters = new JMenu("Filters");
 		menuBar.add(mnFilters);
 		
 		JCheckBoxMenuItem chckbxmntmFilter = new JCheckBoxMenuItem("Filter 1");
 		mnFilters.add(chckbxmntmFilter);
 		
-		//Options menu
+		/**
+		 * Options menu
+		 * 
+		 */
 		JMenu mnOptions = new JMenu("Options");
 		menuBar.add(mnOptions);
 		
