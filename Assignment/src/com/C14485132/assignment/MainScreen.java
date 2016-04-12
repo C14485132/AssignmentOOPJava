@@ -15,14 +15,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JList;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 
 public class MainScreen {
 
 	private JFrame frame;
 	private static ArrayList<String> profanityUser = new ArrayList<String>();
-	private static ArrayList<String> profanity= new ArrayList<String>();
+	private static ArrayList<String> profanity = new ArrayList<String>();
+	private static ArrayList<String> posts = new ArrayList<String>();
+	private static ArrayList<String> postsFiltered = new ArrayList<String>();
 
 	/**
 	 * Launch the application.
@@ -56,23 +59,40 @@ public class MainScreen {
 		frame.setMinimumSize(new Dimension(750,500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		frame.setResizable(false);
 		OptionsScreen options = new OptionsScreen("Filter Options");
 		ReadProfanityList profList = new ReadProfanityList();
 		ReadCustomProfList custProfList = new ReadCustomProfList();
 		profanity = profList.getProfList();
 		profanityUser = custProfList.getCustProfList();
+		JCheckBoxMenuItem chckbxmntmFilter1= new JCheckBoxMenuItem("Default Filter");
+		JCheckBoxMenuItem chckbxmntmFilter2 = new JCheckBoxMenuItem("Custom Filter");
+		JCheckBoxMenuItem chckbxmntmFilterCaps = new JCheckBoxMenuItem("Caps Filter");
 		
 		JTextArea textAreaIn = new JTextArea(5, 23);
 		JScrollPane scrollPaneIn = new JScrollPane(textAreaIn);
-		scrollPaneIn.setVisible(true);
-		frame.getContentPane().add(textAreaIn, BorderLayout.WEST);
+		frame.getContentPane().add(scrollPaneIn, BorderLayout.WEST);
 		
 		JTextArea textAreaOut = new JTextArea(5, 23);
 		JScrollPane scrollPaneOut = new JScrollPane(textAreaOut);
 		textAreaOut.setEditable(false);
-		scrollPaneOut.setVisible(true);
-		frame.getContentPane().add(textAreaOut, BorderLayout.EAST);
+		frame.getContentPane().add(scrollPaneOut, BorderLayout.EAST);
 		
+		//http://stackoverflow.com/questions/13011705/how-to-add-an-imageicon-to-a-jframe
+		java.net.URL imgUrl = getClass().getResource("convertImage.png");
+		ImageIcon icon = new ImageIcon(imgUrl);
+		JButton btnFilterText = new JButton(icon);
+		btnFilterText.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MainFiltering filter = new MainFiltering();
+				postsFiltered = filter.filtering(posts, profanity, chckbxmntmFilter1.isSelected(), profanityUser, chckbxmntmFilter2.isSelected(), chckbxmntmFilterCaps.isSelected());
+			}
+		});
+		frame.getContentPane().add(btnFilterText, BorderLayout.CENTER);
+		btnFilterText.setSize(new Dimension(40, 40));
+		
+		
+		//Menu bars for the stuff up at the top
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
@@ -110,9 +130,6 @@ public class MainScreen {
 			}
 		});
 		mnNewMenu.add(mntmCheckUsername);
-
-		JMenuItem mntmCheck = new JMenuItem("Check pasted text");
-		mnNewMenu.add(mntmCheck);
 		
 		JMenu mnSave = new JMenu("Save");
 		mnFile.add(mnSave);
@@ -124,13 +141,9 @@ public class MainScreen {
 		JMenu mnFilters = new JMenu("Filters");
 		menuBar.add(mnFilters);
 		
-		JCheckBoxMenuItem chckbxmntmFilter1 = new JCheckBoxMenuItem("Default Filter");
+
 		mnFilters.add(chckbxmntmFilter1);
-		
-		JCheckBoxMenuItem chckbxmntmFilter2 = new JCheckBoxMenuItem("Custom Filter");
 		mnFilters.add(chckbxmntmFilter2);
-		
-		JCheckBoxMenuItem chckbxmntmFilterCaps = new JCheckBoxMenuItem("Caps Filter");
 		mnFilters.add(chckbxmntmFilterCaps);
 		
 		/**

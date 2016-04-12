@@ -21,9 +21,6 @@ public class OpenFileToFilter {
 				posts.add(fp.nextLine());
 			}
 			
-			for (String s : posts) {
-				System.out.println(s + "BREAK");
-			}
 			
 			fp.close();
 		}
@@ -31,9 +28,7 @@ public class OpenFileToFilter {
 			System.out.println(e);
 		}
 		
-		
 		return posts;
-		
 	}
 	
 	/*Reference stuff
