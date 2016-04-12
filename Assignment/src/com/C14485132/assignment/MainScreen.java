@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JList;
 
 
@@ -60,9 +62,16 @@ public class MainScreen {
 		profanity = profList.getProfList();
 		profanityUser = custProfList.getCustProfList();
 		
-		JList listBefore = new JList();
-		listBefore.setVisibleRowCount(1);
-		frame.getContentPane().add(listBefore, BorderLayout.WEST);
+		JTextArea textAreaIn = new JTextArea(5, 23);
+		JScrollPane scrollPaneIn = new JScrollPane(textAreaIn);
+		scrollPaneIn.setVisible(true);
+		frame.getContentPane().add(textAreaIn, BorderLayout.WEST);
+		
+		JTextArea textAreaOut = new JTextArea(5, 23);
+		JScrollPane scrollPaneOut = new JScrollPane(textAreaOut);
+		textAreaOut.setEditable(false);
+		scrollPaneOut.setVisible(true);
+		frame.getContentPane().add(textAreaOut, BorderLayout.EAST);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -85,6 +94,10 @@ public class MainScreen {
 				fd.setFile("*.txt");
 				fd.setVisible(true);
 				
+				//Once a file is selected, open it up, read the contents, and put it in the textAreaIn
+				OpenFileToFilter referenceFile = new OpenFileToFilter();
+				referenceFile.getPostsToFilter(fd.getDirectory() + fd.getFile());
+				
 			}
 		});
 		mnNewMenu.add(mntmCheckTextFile);
@@ -106,7 +119,7 @@ public class MainScreen {
 		
 		/**
 		 * Filter Menu bar
-		 * 
+		 * The user selects what filters should be active for the file checking
 		 */
 		JMenu mnFilters = new JMenu("Filters");
 		menuBar.add(mnFilters);
@@ -116,6 +129,9 @@ public class MainScreen {
 		
 		JCheckBoxMenuItem chckbxmntmFilter2 = new JCheckBoxMenuItem("Custom Filter");
 		mnFilters.add(chckbxmntmFilter2);
+		
+		JCheckBoxMenuItem chckbxmntmFilterCaps = new JCheckBoxMenuItem("Caps Filter");
+		mnFilters.add(chckbxmntmFilterCaps);
 		
 		/**
 		 * Options menu
