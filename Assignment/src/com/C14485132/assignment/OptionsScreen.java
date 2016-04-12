@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,8 +30,8 @@ public class OptionsScreen extends JFrame {
 	private JButton btnAddword;
 	static ArrayList<String> profanityUser = new ArrayList<String>();
 	private JButton btnClearCustomFilter;
-	private JButton btnOpenCustomFilter;
-	
+	String fileLoc;
+	ReadCustomProfList list = new ReadCustomProfList();
 
 	public OptionsScreen(String title) {
 		super(title);
@@ -40,6 +41,9 @@ public class OptionsScreen extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		fileLoc = new String(MainScreen.class.getProtectionDomain().getCodeSource().getLocation().getFile().substring(1));
+		fileLoc = fileLoc.replaceAll("/AssignmentOOPJava/bin", "/AssignmentOOPJava/Assignment/src");
+		fileLoc = fileLoc +  "/com/C14485132/assignment/CustomFilter.txt";
 		
 		JLabel lblAddProfanityRule = new JLabel("Add profanity rule: ");
 		contentPane.add(lblAddProfanityRule);
@@ -48,6 +52,7 @@ public class OptionsScreen extends JFrame {
 		txtWordtoadd = new JTextField();
 		txtWordtoadd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				profanityUser = list.getCustProfList();
 				addProfanity(txtWordtoadd.getText());
 				
 			}
@@ -58,6 +63,7 @@ public class OptionsScreen extends JFrame {
 		btnAddword = new JButton("Add Word");
 		btnAddword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				profanityUser = list.getCustProfList();
 				addProfanity(txtWordtoadd.getText());
 				
 			}
@@ -81,36 +87,14 @@ public class OptionsScreen extends JFrame {
 	
 	public void addProfanity(String wordToAdd) {
 		//Code acquired from:
-		//http://stackoverflow.com/questions/3153337/get-current-working-directory-in-java
 		//http://stackoverflow.com/questions/1625234/how-to-append-text-to-an-existing-file-in-java
-		
-		//Tries to open a file named CustomFilter.txt if it can't do that, create it and open
-		String fileLoc = new String(MainScreen.class.getProtectionDomain().getCodeSource().getLocation().getFile().substring(1));
-		fileLoc = fileLoc.replaceAll("/AssignmentOOPJava/bin", "/AssignmentOOPJava/Assignment/src");
-		fileLoc = fileLoc +  "/com/C14485132/assignment/CustomFilter.txt";
-		File customFilter = new File(fileLoc);
 		boolean isWordAlreadyThere = false;
-		
-		PrintWriter out = null;
-		//If the file exists
-		if ( customFilter.exists() && !customFilter.isDirectory() ) {
-			try {
-				out = new PrintWriter(new FileOutputStream(new File(fileLoc), true));
-				
-				InputStream badwordsLoc = this.getClass().getResourceAsStream("CustomFilter.txt");
-				Scanner fp = new Scanner(badwordsLoc);
-				
-				while (fp.hasNext()) {
-					profanityUser.add(fp.next());
-				}
-				
-				fp.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-		    //Only add words that are not in the file to the array list and file
-		    wordToAdd = wordToAdd.toLowerCase();
+		//Tries to open a file named CustomFilter.txt if it can't do that, create it and open
+		try(FileWriter fw = new FileWriter(fileLoc, true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+		{
+			wordToAdd = wordToAdd.toLowerCase();
 		    
 		    //Checking to see if the word is already in the user filter list
 		    for(String s : profanityUser) {
@@ -122,45 +106,20 @@ public class OptionsScreen extends JFrame {
 		    if (!isWordAlreadyThere) {
 			    out.println(wordToAdd);
 			    profanityUser.add(wordToAdd);
-			    JOptionPane.showMessageDialog(new JFrame(), "<html><center>Word added!</center></html>", "Success!", JOptionPane.PLAIN_MESSAGE);
+			    list.setCustProfList(profanityUser);
+			    JOptionPane.showMessageDialog(new JFrame(), "Word added!", "Success!", JOptionPane.PLAIN_MESSAGE);
 		    } else {
-		    	JOptionPane.showMessageDialog(new JFrame(), "<html><center>That word is already in the filter.</center></html>", "Just a heads up", JOptionPane.PLAIN_MESSAGE);
-		    }
-		    
-		    out.close();
-		}
-		else {
-		    try {
-				out = new PrintWriter(fileLoc);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-
-		    wordToAdd = wordToAdd.toLowerCase();
-		    
-		    //Checking to see if the word is already in the user filter list
-		    for(String s : profanityUser) {
-		    	if(wordToAdd.equalsIgnoreCase(s)) {
-		    		isWordAlreadyThere = true;
-		    	}
-		    }
-		    
-		    if (!isWordAlreadyThere) {
-			    out.println(wordToAdd);
-			    profanityUser.add(wordToAdd);
-			    JOptionPane.showMessageDialog(new JFrame(), "<html><center>Word added!</center></html>", "Success!", JOptionPane.PLAIN_MESSAGE);
-		    } else {
-		    	JOptionPane.showMessageDialog(new JFrame(), "<html><center>That word is already in the filter.</center></html>", "Just a heads up", JOptionPane.PLAIN_MESSAGE);
+		    	JOptionPane.showMessageDialog(new JFrame(), "That word is already in the filter.", "Just a heads up", JOptionPane.PLAIN_MESSAGE);
 		    }
 		    out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 	}
 	
+	//Wipes the CustomFilter text file
 	public void wipeFile() {
-		String fileLoc = new String(MainScreen.class.getProtectionDomain().getCodeSource().getLocation().getFile().substring(1));
-		fileLoc = fileLoc.replaceAll("/AssignmentOOPJava/bin", "/AssignmentOOPJava/Assignment/src");
-		fileLoc = fileLoc +  "com/C14485132/assignment/CustomFilter.txt";
 		
 		//http://stackoverflow.com/questions/29878237/java-how-to-clear-a-text-file-without-deleting-it
 		//Clears the file without deleting it
@@ -169,22 +128,13 @@ public class OptionsScreen extends JFrame {
 			writer.print("");
 			writer.close();
 			profanityUser.clear();
-			
-			//now open the file and check if it's blank
-			InputStream file = this.getClass().getResourceAsStream("CustomFilter.txt");
-			Scanner fp = new Scanner(file);
-			
-			
-			if (!fp.hasNext()) {
-				JOptionPane.showMessageDialog(new JFrame(), "<html><center>File cleared!</center></html>", "Success!", JOptionPane.PLAIN_MESSAGE);
-			} else {
-				//Just tell the user it wasn't wiped
-				JOptionPane.showMessageDialog(new JFrame(), "<html><center>File was not properly wiped!</center></html>", "Error!", JOptionPane.WARNING_MESSAGE);
-			}
+		    list.setCustProfList(profanityUser);
+
+			JOptionPane.showMessageDialog(new JFrame(), "File cleared!", "Success!", JOptionPane.PLAIN_MESSAGE);
+
 		} catch (IOException e) {
 			e.printStackTrace();
-			//If file doesn't open, do nothing because if the file doesn't exist, problem solveed, file is technically blanked.
+			//If file doesn't open, do nothing because if the file doesn't exist, problem solved, file is technically blanked.
 		}
 	}
-
 }

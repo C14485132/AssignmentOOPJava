@@ -2,20 +2,25 @@ package com.C14485132.assignment;
 
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JList;
 
 
 public class MainScreen {
 
 	private JFrame frame;
+	private static ArrayList<String> profanityUser = new ArrayList<String>();
+	private static ArrayList<String> profanity= new ArrayList<String>();
 
 	/**
 	 * Launch the application.
@@ -46,8 +51,18 @@ public class MainScreen {
 	private void initialize() {
 		frame = new JFrame("Post Filter");
 		frame.setBounds(100, 100, 750, 500);
+		frame.setMinimumSize(new Dimension(750,500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		OptionsScreen options = new OptionsScreen("Filter Options");
+		ReadProfanityList profList = new ReadProfanityList();
+		ReadCustomProfList custProfList = new ReadCustomProfList();
+		profanity = profList.getProfList();
+		profanityUser = custProfList.getCustProfList();
+		
+		JList listBefore = new JList();
+		listBefore.setVisibleRowCount(1);
+		frame.getContentPane().add(listBefore, BorderLayout.WEST);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -96,8 +111,11 @@ public class MainScreen {
 		JMenu mnFilters = new JMenu("Filters");
 		menuBar.add(mnFilters);
 		
-		JCheckBoxMenuItem chckbxmntmFilter = new JCheckBoxMenuItem("Filter 1");
-		mnFilters.add(chckbxmntmFilter);
+		JCheckBoxMenuItem chckbxmntmFilter1 = new JCheckBoxMenuItem("Default Filter");
+		mnFilters.add(chckbxmntmFilter1);
+		
+		JCheckBoxMenuItem chckbxmntmFilter2 = new JCheckBoxMenuItem("Custom Filter");
+		mnFilters.add(chckbxmntmFilter2);
 		
 		/**
 		 * Options menu
@@ -109,7 +127,6 @@ public class MainScreen {
 		JMenuItem mntmFilterOptions = new JMenuItem("Filter Options");
 		mntmFilterOptions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OptionsScreen options = new OptionsScreen("Filter Options");
 				options.setVisible(true);
 			}
 		});
