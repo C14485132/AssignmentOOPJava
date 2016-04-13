@@ -36,6 +36,7 @@ public class OptionsScreen extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		//Setting the CustomFilter location
 		fileLoc = new String(MainScreen.class.getProtectionDomain().getCodeSource().getLocation().getFile().substring(1));
 		fileLoc = fileLoc.replaceAll("/AssignmentOOPJava/bin", "/AssignmentOOPJava/Assignment/src");
 		fileLoc = fileLoc +  "/com/C14485132/assignment/CustomFilter.txt";
@@ -43,7 +44,7 @@ public class OptionsScreen extends JFrame {
 		JLabel lblAddProfanityRule = new JLabel("Add profanity rule: ");
 		contentPane.add(lblAddProfanityRule);
 		
-		
+		//Reading in the word typed into the box when enter is pressed
 		txtWordtoadd = new JTextField();
 		txtWordtoadd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -55,6 +56,7 @@ public class OptionsScreen extends JFrame {
 		contentPane.add(txtWordtoadd);
 		txtWordtoadd.setColumns(10);
 		
+		//Reading in the word typed into the box when the button is pressed
 		btnAddword = new JButton("Add Word");
 		btnAddword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -65,6 +67,7 @@ public class OptionsScreen extends JFrame {
 		});
 		contentPane.add(btnAddword);
 		
+		//Clears the CustomFilter file
 		btnClearCustomFilter = new JButton("Clear Custom Filter");
 		btnClearCustomFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

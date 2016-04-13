@@ -43,6 +43,7 @@ public class UsernameCheckerInput extends JFrame {
 		JLabel lblUnamereqs = new JLabel("<html><center>Please enter the username to check<br>(max 15 characters, alphanumeric/underscore only)</center></html>");
 		contentPane.add(lblUnamereqs);
 		
+		//Where the user puts in a username to check, and enter checks it
 		JTextField txtUserInput = new JTextField(15);
 		//Press enter to run
 		txtUserInput.addActionListener(new ActionListener() {
@@ -52,6 +53,7 @@ public class UsernameCheckerInput extends JFrame {
 		});
 		contentPane.add(txtUserInput);
 		
+		//Checking the username the user entered
 		JButton btnSubmit = new JButton("Check");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -71,6 +73,7 @@ public class UsernameCheckerInput extends JFrame {
 		JLabel lblThresholdtext = new JLabel("Caps warning threshold:");
 		contentPane.add(lblThresholdtext);
 		
+		//Dropdown menu that allows the user to determine how much caps should be allowed
 		Choice choiceThreshold = new Choice();
 		setThresholdPercent(0.5);
 		choiceThreshold.addItemListener(new ItemListener() {

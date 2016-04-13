@@ -22,6 +22,7 @@ public class ReadCustomProfList {
 			InputStream badwordsLoc = this.getClass().getResourceAsStream("CustomFilter.txt");
 			Scanner fp = new Scanner(badwordsLoc);
 			
+			//Keep reading in custom profanity stuff until end of file is reached
 			while (fp.hasNext()) {
 				profanityUser.add(fp.next());
 			}
@@ -34,7 +35,6 @@ public class ReadCustomProfList {
 			try {
 				text.createNewFile();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

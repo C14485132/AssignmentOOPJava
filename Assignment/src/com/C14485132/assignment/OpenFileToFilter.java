@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStream;
 
 public class OpenFileToFilter {
 	
@@ -13,14 +12,15 @@ public class OpenFileToFilter {
 	
 	public ArrayList<String> getPostsToFilter (String fileLocation) {
 		
+		//Tries to open the file
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
 			Scanner fp = new Scanner(reader);
 			
+			//Reading all of the lines within the file, and adding them to an array list
 			while (fp.hasNext()) {
 				posts.add(fp.nextLine());
 			}
-			
 			
 			fp.close();
 		}
@@ -30,30 +30,5 @@ public class OpenFileToFilter {
 		
 		return posts;
 	}
-	
-	/*Reference stuff
-	
-	static ArrayList<String> profanity = new ArrayList<String>();
-	
-	//opening badwords.txt, adding all words in the file to an ArrayList, then returning the arraylist
-	public ArrayList<String> () {
-		try {
-			InputStream badwordsLoc = this.getClass().getResourceAsStream("badwords.txt");
-			Scanner fp = new Scanner(badwordsLoc);
-			
-			while (fp.hasNext()) {
-				profanity.add(fp.next());
-			}
-			
-			fp.close();
-		}
-		catch (Exception e) {
-			System.out.println(e);
-		}
-		
-		return profanity;
-	}
-	
-	*/
 	
 }
